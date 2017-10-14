@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+
+<PropertyList>
+	<sim>
+		<addons>
+			<landing-rate>
+		  		<name>landing_rate</name>
+		  		<version type= "double">0.3</version>
+		  		<authors>BR-RVD</authors>
+		  		<description>Show your landing stats!</description>
+		  		<changelog>#first_release</changelog>
+		  		<sharemp>0</sharemp> <!-- share and send mp message when land? 1:yes 0:no -->
+		  	</landing-rate>
+	  	</addons>
+	</sim>
+</PropertyList>
