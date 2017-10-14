@@ -3,6 +3,10 @@ Show your landing stats.
 
 ![Example](https://i.imgur.com/PwOQYFI.jpg)
 
+### Requirements
+
+FlightGear 2017.3.1 version.
+
 ### Install Procedures
 
 Unzip landing_rate folder to any place you want. e.g C:\Users\USERNAME\Documents\FlightGear\Addons\landing_rate
