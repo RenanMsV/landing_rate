@@ -1,7 +1,7 @@
 # FlightGear Landing Rate addon
 Show your landing stats.
 
-![ErrorExample](https://i.imgur.com/PwOQYFI.jpg)
+![Example](https://i.imgur.com/PwOQYFI.jpg)
 
 ### Install Procedures
 
