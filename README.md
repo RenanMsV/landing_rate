@@ -1,5 +1,5 @@
 # FlightGear Landing Rate addon
-Show your landing stats.
+Show your landing stats. Depending on your rate of descent on touching the ground it rates your landing as Excellent, Good, Acceptable, or Bad.
 
 ![Example](https://i.imgur.com/PwOQYFI.jpg)
 
