@@ -5,7 +5,7 @@ Show your landing stats. Depending on your rate of descent on touching the groun
 
 ### Requirements
 
-FlightGear 2017.3.1 version.
+FlightGear 2018.1 version.
 
 ### Install Procedures
 
