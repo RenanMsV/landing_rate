@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<PropertyList>
+  <meta>
+    <file-type type="string">FlightGear add-on metadata</file-type>
+    <format-version type="int">1</format-version>
+  </meta>
+
+  <addon>
+    <identifier type="string">org.flightgear.addons.landing_rate</identifier>
+    <name type="string">landing_rate</name>
+    <version type="string">0.0.2</version>
+    <platform>all</platform>
+    <summary lang="en">landing_rate</summary>
+    <description lang="en">landing_rate</description>
+	<provider-name="RenanMsV on GitHub">
+</addon>
+</PropertyList>
