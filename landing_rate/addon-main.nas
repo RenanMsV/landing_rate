@@ -2,7 +2,7 @@ SHARE_RATE_MP = getprop("sim/addons/landing-rate/sharemp"); # send mp message wh
 
 #--------------------------------------------------
 
-landing_rank = [ ["Excellent", 0, [0, 1, 0]], ["Good", 200, [1, 1, 0]], ["Acceptable", 400, [1, .64, 0]], ["Bad", 600, [1, 0, 0]] ]; # [description, minFPM, [r, g, b]]
+landing_rank = [ ["Excellent", 0, [0, 1, 0]],["Very Good", 100, [0, 1, 0]], ["Good", 200, [1, 0.90, 0]], ["Acceptable", 400, [1, .64, 0]], ["Bad", 600, [1, 0, 0]] ]; # [description, minFPM, [r, g, b]]
 
 var window = screen.window.new(10, 10, 3, 10); # create new window object. 750, 10 : Lower Right
 window.bg = [0,0,0,.5]; # black alpha .5 background
@@ -40,7 +40,7 @@ var send_mp_msg = func (msg) {
 var print_persistent_screen_msg = func (msg, indexColor, time) {
 	window.autoscroll = time; # setting message to be show for 30 seconds
 	window.write(msg, indexColor[0], indexColor[1], indexColor[2]); # print message with color arg.
-	settimer(func(){window.autoscroll = 10;}, time); # setting message to be show for 10 seconds (default)
+	settimer(func(){window.autoscroll = 60;}, time); # setting message to be show for 60 seconds (default)
 }
 
 var checkCompatibility = func {
