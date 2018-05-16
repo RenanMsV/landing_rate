@@ -40,7 +40,7 @@ var send_mp_msg = func (msg) {
 var print_persistent_screen_msg = func (msg, indexColor, time) {
 	window.autoscroll = time; # setting message to be show for 30 seconds
 	window.write(msg, indexColor[0], indexColor[1], indexColor[2]); # print message with color arg.
-	settimer(func(){window.autoscroll = 60;}, time); # setting message to be show for 60 seconds (default)
+	settimer(func(){window.autoscroll = 10;}, time); # setting message to be show for 10 seconds (default)
 }
 
 var checkCompatibility = func {
