@@ -7,7 +7,7 @@ landing_rank = [ ["Excellent", 0, [0, 1, 0]],["Very Good", 100, [0, 1, 0]], ["Go
 var window = screen.window.new(10, 10, 3, 10); # create new window object. 750, 10 : Lower Right
 window.bg = [0,0,0,.5]; # black alpha .5 background
 var agl_ft = 20; # agl trigger temporary 20.
-var agl_list = _setlistener("sim/signals/fdm-initialized", func { removelistener(agl_list); settimer(func () { checkCompatibility(); agl_ft = getprop("position/altitude-agl-ft") + 6; }, 3); } ); # setting up agl listener, checking compatibility,  set agl trigger by current agl.
+var agl_list = _setlistener("sim/signals/fdm-initialized", func { removelistener(agl_list); maketimer(0.1, func () { checkCompatibility(); agl_ft = getprop("position/altitude-agl-ft") + 6; }, 3); } ); # setting up agl listener, checking compatibility,  set agl trigger by current agl.
 
 var init_landing_rate_timer = func {
 	gear_props = ["gear/gear[0]/wow", "gear/gear[1]/wow", "gear/gear[2]/wow"]; # gear props array
@@ -40,7 +40,7 @@ var send_mp_msg = func (msg) {
 var print_persistent_screen_msg = func (msg, indexColor, time) {
 	window.autoscroll = time; # setting message to be show for 30 seconds
 	window.write(msg, indexColor[0], indexColor[1], indexColor[2]); # print message with color arg.
-	settimer(func(){window.autoscroll = 10;}, time); # setting message to be show for 10 seconds (default)
+	maketimer(0.1, func(){window.autoscroll = 10;}, time); # setting message to be show for 10 seconds (default)
 }
 
 var checkCompatibility = func {
