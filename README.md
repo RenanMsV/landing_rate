@@ -1,6 +1,6 @@
 # FlightGear Landing Rate addon
 Show your landing stats. Depending on your rate of descent on touching the ground it rates your landing as Excellent, Good, Acceptable, or Bad.
-Slightly modified by PO to make it compatible with more recent version of FG. 
+Slightly modified by PO to make it compatible with more recent version of FG.
 
 
 ![Example](https://i.imgur.com/PwOQYFI.jpg)
@@ -11,11 +11,11 @@ FlightGear 2018.1 version.
 
 ### Install Procedures
 
-Unzip landing_rate folder to any place you want. e.g C:\Users\USERNAME\Documents\FlightGear\Addons\landing_rate
+Unzip landing_rate folder to any place you want. e.g C:\Users\USERNAME\FlightGear\Addons\landing_rate
 
 Then add this command line to your FlightGear Shortcut :
 
---addon="C:\Users\USERNAME\Documents\FlightGear\Addons\landing_rate"
+--addon="C:\Users\USERNAME\FlightGear\Addons\landing_rate"
 
 Remember to replace USERNAME with your OS username.
 Note that this command line must have the correct path to the landing_rate folder.
@@ -32,8 +32,8 @@ If you're using an incompatible aircraft a message will be show. And the addon w
 
 If you want, you can activate it. And a message will be sent by multiplayer chat showing your landing stats.
 
-To enable it go to landing_rate folder and open config.xml. Find sharemp line.
+To enable it go to landing_rate folder and open addon-config.xml. Find sharemp line.
 
 ```<sharemp>0</sharemp>```
 
-Change sharemp value ( 1 for yes and 0 for no ). Restart your simulator. Done.
+Change sharemp value (1 for yes and 0 for no). Restart your simulator. Done.

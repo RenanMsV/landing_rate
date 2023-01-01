@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+
+<PropertyList>
+    <addons>
+        <by-id>
+            <org.flightgear.addons.landing-rate>
+                <addon-devel>
+                    <sharemp>0</sharemp> <!-- share and send mp message when land? 1: yes 0: no -->
+                </addon-devel>
+            </org.flightgear.addons.landing-rate>
+        </by-id>
+    </addons>
+</PropertyList>
