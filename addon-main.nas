@@ -41,12 +41,6 @@ var aglFt = 20; # agl trigger temporary 20.
 var initLandingRateTimer = func (addon) {
     var addonNodePath = addon.node.getPath();
 
-    var gearProps = [ # gear props array
-        "/gear/gear[0]/wow",
-        "/gear/gear[1]/wow",
-        "/gear/gear[2]/wow",
-    ];
-
     var landingRateProps = [ # addon props array
         addonNodePath ~ "/addon-devel/rate-fpm",
         addonNodePath ~ "/addon-devel/rate-mts",
@@ -60,12 +54,18 @@ var initLandingRateTimer = func (addon) {
         props.globals.initNode(prop, 0, nil);
     }
 
+    var gearProps = [ # gear props array
+        "/gear/gear[0]/wow",
+        "/gear/gear[1]/wow",
+        "/gear/gear[2]/wow",
+    ];
+
     # set gear props listeners
     foreach (var prop; gearProps) {
-        setlistener(prop, func {
-            var isLanded = getprop(prop) and !getprop(addonNodePath ~ "/addon-devel/landed");
+        setlistener(prop, func (node) {
+            var isLanded = node.getBoolValue() and !getprop(addonNodePath ~ "/addon-devel/landed");
             setprop(addonNodePath ~ "/addon-devel/landed", isLanded);
-        });
+        }, 0, 0); # startup = 0 (default), runtime = 0 (only when value change)
     }
 
     # setting up altTrigg timer
@@ -150,5 +150,5 @@ var main = func (addon) {
             initLandingRateTimer(addon); # init addon
             removelistener(fdmInitListener);
         }
-    });
+    }, 1); # startup = 1
 };
