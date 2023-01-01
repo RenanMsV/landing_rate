@@ -150,5 +150,5 @@ var main = func (addon) {
             initLandingRateTimer(addon); # init addon
             removelistener(fdmInitListener);
         }
-    }, 1); # startup = 1
+    });
 };
