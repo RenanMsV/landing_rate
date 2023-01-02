@@ -141,8 +141,9 @@ var checkCompatibility = func {
 };
 
 var main = func (addon) {
-    var fdmInitListener = setlistener("/sim/signals/fdm-initialized", func (node) {
-        if (node.getBoolValue()) {
+    # Must be _setlistener because removelistener doesn't work well with setlistener
+    var fdmInitListener = _setlistener("/sim/signals/fdm-initialized", func {
+        if (getprop("/sim/signals/fdm-initialized")) {
             # checking compatibility, set agl trigger by current agl.
             checkCompatibility();
             aglFt = getprop("/position/altitude-agl-ft") + 6;
