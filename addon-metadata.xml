@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<PropertyList>
+    <meta>
+        <file-type type="string">FlightGear add-on metadata</file-type>
+        <format-version type="int">1</format-version>
+    </meta>
+
+    <addon>
+        <identifier type="string">org.flightgear.addons.landing-rate</identifier>
+        <name type="string">Landing Rate</name>
+        <version type="string">1.0.0</version>
+
+        <authors>
+            <author>
+                <name type="string">BR-RVD</name>
+            </author>
+        </authors>
+
+        <min-FG-version type="string">2018.1.0</min-FG-version>
+        <max-FG-version type="string">none</max-FG-version>
+
+        <short-description type="string">Show your landing stats</short-description>
+        <long-description type="string">
+            This add-on, after landing, shows the rate of how softly you landed.
+        </long-description>
+
+        <localized>
+            <pl>
+                <short-description type="string">
+                    Pokaż statystyki lądowania
+                </short-description>
+
+                <long-description type="string">
+                    Ten dodatek po wylądowaniu pokazuje statystyki, jak miękko wylądowałeś.
+                </long-description>
+            </pl>
+        </localized>
+
+        <license>
+            <designation type="string">GNU GPL version 3 or later</designation>
+
+            <file type="string">
+                <!-- Use a relative, slash-separated path to a file under the add-on
+                    base directory that contains the add-on license text. -->
+                LICENSE
+            </file>
+
+            <url type="string">https://www.gnu.org/licenses/gpl-3.0.html</url>
+        </license>
+
+        <urls>
+            <home-page type="string">
+                https://github.com/RenanMsV/landing_rate
+            </home-page>
+
+            <download type="string">
+                https://github.com/RenanMsV/landing_rate
+            </download>
+
+            <support type="string">
+                https://github.com/RenanMsV/landing_rate
+            </support>
+
+            <code-repository type="string">
+                https://github.com/RenanMsV/landing_rate
+            </code-repository>
+        </urls>
+
+        <tags>
+            <tag type="string">landing</tag>
+            <tag type="string">rate</tag>
+            <tag type="string">stats</tag>
+        </tags>
+    </addon>
+</PropertyList>
