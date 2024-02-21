@@ -129,15 +129,31 @@ var checkCompatibility = func {
         getprop("/instrumentation/vertical-speed-indicator/indicated-speed-fpm") == nil or
         getprop("/instrumentation/vertical-speed-indicator/indicated-speed-mps") == nil
     ) {
-        # prints persistent message, white, 30 sec
-        printPersistentScreenMsg("Aircraft not compatible with Landing Rate addon. Sorry about that.", COLOR_WHITE, 30);
-
-        # die addon, quit script with custom message.
-        die("Landing Rate addon shutdown. Aircraft not compatible with Landing Rate addon. Sorry about that.");
+        return 0;
     }
 
-    printPersistentScreenMsg("Landing Rate Addon Loaded", COLOR_WHITE, 20); # success
-    logprint(LOG_ALERT, "Landing Rate addon loaded."); # success
+    return 1; # success
+};
+
+var evaluateLandingRateAddonhints = func {
+    # evaluate addon-hints
+    # for hints properties, we treat the rank name as lowercase and convert spaces to dashes
+    foreach (var rank; LANDING_RANK) {
+        var rank_prop_name = "/sim/addon-hints/landing_rate/ranks/"
+            ~ string.replace(string.lc(rank.name), " ", "-");
+
+        var rank_prop_val_minfpm = getprop(rank_prop_name ~ "/min-fpm");
+        if (rank_prop_val_minfpm != nil) {
+            if (string.scanf(rank_prop_val_minfpm, "%f", var r=[])) {
+                rank.minFpm = rank_prop_val_minfpm;
+                logprint(LOG_DEBUG, "Landing Rate Addon: addon-hint '" ~ rank.name ~ "' minFpm set to " ~ rank_prop_val_minfpm);
+            } else {
+                logprint(LOG_ALERT, "Landing Rate Addon: addon-hint invalid format (not a number) in " ~ rank_prop_name );
+            }
+        } else {
+            logprint(LOG_DEBUG, "Landing Rate Addon: addon-hint '" ~ rank.name ~ "' ignored nil value");
+        }
+    }
 };
 
 var main = func (addon) {
@@ -145,11 +161,24 @@ var main = func (addon) {
     var fdmInitListener = _setlistener("/sim/signals/fdm-initialized", func {
         if (getprop("/sim/signals/fdm-initialized")) {
             # checking compatibility, set agl trigger by current agl.
-            checkCompatibility();
-            aglFt = getprop("/position/altitude-agl-ft") + 6;
+            if (checkCompatibility()) {
+                evaluateLandingRateAddonhints();
 
-            initLandingRateTimer(addon); # init addon
-            removelistener(fdmInitListener);
+                aglFt = getprop("/position/altitude-agl-ft") + 6;
+
+                initLandingRateTimer(addon); # init addon
+                removelistener(fdmInitListener);
+
+                printPersistentScreenMsg("Landing Rate Addon Loaded", COLOR_WHITE, 20); # success
+                print("Landing Rate addon loaded."); # success
+
+            } else {
+                # prints persistent message, white, 30 sec
+                printPersistentScreenMsg("Aircraft not compatible with Landing Rate addon. Sorry about that.", COLOR_WHITE, 30);
+
+                # die addon, quit script with custom message.
+                logprint(LOG_ALERT, "Landing Rate addon shutdown. Aircraft not compatible with Landing Rate addon. Sorry about that.");
+            }
         }
     });
 };

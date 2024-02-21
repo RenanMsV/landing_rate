@@ -8,7 +8,7 @@
     <addon>
         <identifier type="string">org.flightgear.addons.landing-rate</identifier>
         <name type="string">Landing Rate</name>
-        <version type="string">1.0.0</version>
+        <version type="string">1.1.0</version>
 
         <authors>
             <author>
