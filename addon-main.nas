@@ -9,27 +9,22 @@ var COLOR_GREEN  = { r:   0, g:   1, b: 0 };
 var LANDING_RANK = [
     {
         name   : "Bad",
-        minFpm : 600,
         color  : COLOR_RED,
     },
     {
         name   : "Acceptable",
-        minFpm : 400,
         color  : COLOR_ORANGE,
     },
     {
         name   : "Good",
-        minFpm : 200,
         color  : COLOR_YELLOW,
     },
     {
         name   : "Very Good",
-        minFpm : 100,
         color  : COLOR_LIME,
     },
     {
         name   : "Excellent",
-        minFpm : 0,
         color  : COLOR_GREEN,
     },
 ];
@@ -96,7 +91,10 @@ var sendLandingMessage = func (addon, g, fpm, mps) {
 
     # send message by landing rate, using LANDING_RANK table
     foreach (var rank; LANDING_RANK) {
-        if (fpmAbsolute >= rank.minFpm) {
+        var rank_prop_name = addon.node.getPath()~"/ranks/"
+            ~ string.replace(string.lc(rank.name), " ", "-");
+        var rank_prop_val_minfpm = getprop(rank_prop_name ~ "/min-fpm");
+        if (fpmAbsolute >= rank_prop_val_minfpm) {
             printScreenMsg(
                 addon,
                 sprintf("%s Landing! Fpm: %.3f Mps: %.3f G-Force: %.1f", rank.name, fpm, mps, g),
@@ -135,23 +133,23 @@ var checkCompatibility = func {
     return 1; # success
 };
 
-var evaluateLandingRateAddonhints = func {
-    # evaluate addon-hints
+var evaluateLandingRateAddonCfg = func(base, addon) {
+    # evaluate config from "ranks" subnode
     # for hints properties, we treat the rank name as lowercase and convert spaces to dashes
+    logprint(LOG_DEBUG, "Landing Rate Addon: evaluate config from: "~base);
     foreach (var rank; LANDING_RANK) {
-        var rank_prop_name = "/sim/addon-hints/landing_rate/ranks/"
-            ~ string.replace(string.lc(rank.name), " ", "-");
+        var rank_prop_name = string.replace(string.lc(rank.name), " ", "-");
 
-        var rank_prop_val_minfpm = getprop(rank_prop_name ~ "/min-fpm");
+        var rank_prop_val_minfpm = getprop(base~"/ranks/"~rank_prop_name ~ "/min-fpm");
         if (rank_prop_val_minfpm != nil) {
             if (string.scanf(rank_prop_val_minfpm, "%f", var r=[])) {
-                rank.minFpm = rank_prop_val_minfpm;
-                logprint(LOG_DEBUG, "Landing Rate Addon: addon-hint '" ~ rank.name ~ "' minFpm set to " ~ rank_prop_val_minfpm);
+                setprop(addon.node.getPath()~"/ranks/"~rank_prop_name ~ "/min-fpm", rank_prop_val_minfpm);
+                logprint(LOG_DEBUG, "Landing Rate Addon: config '" ~ rank.name ~ "' minFpm set to " ~ rank_prop_val_minfpm);
             } else {
-                logprint(LOG_ALERT, "Landing Rate Addon: addon-hint invalid format (not a number) in " ~ rank_prop_name );
+                logprint(LOG_ALERT, "Landing Rate Addon: config invalid format (not a number) in " ~ rank_prop_name );
             }
         } else {
-            logprint(LOG_DEBUG, "Landing Rate Addon: addon-hint '" ~ rank.name ~ "' ignored nil value");
+            logprint(LOG_DEBUG, "Landing Rate Addon: config '" ~ rank.name ~ "' ignored nil value");
         }
     }
 };
@@ -162,7 +160,8 @@ var main = func (addon) {
         if (getprop("/sim/signals/fdm-initialized")) {
             # checking compatibility, set agl trigger by current agl.
             if (checkCompatibility()) {
-                evaluateLandingRateAddonhints();
+                # load addon-hints from aircraft
+                evaluateLandingRateAddonCfg("/sim/addon-hints/landing_rate/", addon);
 
                 aglFt = getprop("/position/altitude-agl-ft") + 6;
 
