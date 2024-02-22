@@ -31,48 +31,7 @@ var LANDING_RANK = [
 
 
 # Additional configs
-var LANDING_RANK_CFG = props.Node.new({
-    # Table for guessing landing rates from optionally set ICAO data in aircraft.xml
-    # in "/aircraft/icao/wake-turbulence-category" (J, H, M, L)
-    # see https://skybrary.aero/articles/icao-wake-turbulence-category
-    "icao-wake-turbulence-category": {
-        L: {
-            ranks: {
-                "bad":        {"min-fpm":300},
-                "acceptable": {"min-fpm":200},
-                "good":       {"min-fpm":100},
-                "very-good":  {"min-fpm":50}
-            }
-        },
-        # TODO: need better data for these!
-        M: {
-            ranks: {
-                "bad":        {"min-fpm":400},
-                "acceptable": {"min-fpm":300},
-                "good":       {"min-fpm":200},
-                "very-good":  {"min-fpm":100}
-            }
-        },
-        H: {
-            ranks: {
-                "bad":        {"min-fpm":600},
-                "acceptable": {"min-fpm":400},
-                "good":       {"min-fpm":200},
-                "very-good":  {"min-fpm":100}
-            }
-        },
-        J: {
-            ranks: {
-                "bad":        {"min-fpm":600},
-                "acceptable": {"min-fpm":400},
-                "good":       {"min-fpm":200},
-                "very-good":  {"min-fpm":100}
-            }
-        }
-    }
-});
-
-
+io.include("addon-config.nas");
 
 
 var window = screen.window.new(10, 10, 3, 10); # create new window object, x = 10, y = 10, maxlines = 3, autoscroll = 10
@@ -216,10 +175,18 @@ var main = func (addon) {
 
                 # If defined, load ICAO wake turbulence guess values
                 var icao_wake_t_cat = getprop("/aircraft/icao/wake-turbulence-category");
-                if (icao_wake_t_cat != "") {
+                if (icao_wake_t_cat != nil and icao_wake_t_cat != "") {
                     var icao_wake_t_cat_cfg = LANDING_RANK_CFG.getNode("icao-wake-turbulence-category/"~icao_wake_t_cat);
                     if (icao_wake_t_cat_cfg != nil)
                         evaluateLandingRateAddonCfg(icao_wake_t_cat_cfg, addon);
+                }
+
+                # If defined, load aircraft type values
+                var aircraft = getprop("/sim/aircraft");
+                if (aircraft != nil and aircraft != "") {
+                    var aircraft_type_cfg = LANDING_RANK_CFG.getNode("aircraft-types/"~aircraft);
+                    if (aircraft_type_cfg != nil)
+                        evaluateLandingRateAddonCfg(aircraft_type_cfg, addon);
                 }
 
                 # load addon-hints from aircraft
