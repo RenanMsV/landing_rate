@@ -29,6 +29,52 @@ var LANDING_RANK = [
     },
 ];
 
+
+# Additional configs
+var LANDING_RANK_CFG = props.Node.new({
+    # Table for guessing landing rates from optionally set ICAO data in aircraft.xml
+    # in "/aircraft/icao/wake-turbulence-category" (J, H, M, L)
+    # see https://skybrary.aero/articles/icao-wake-turbulence-category
+    "icao-wake-turbulence-category": {
+        L: {
+            ranks: {
+                "bad":        {"min-fpm":300},
+                "acceptable": {"min-fpm":200},
+                "good":       {"min-fpm":100},
+                "very-good":  {"min-fpm":50}
+            }
+        },
+        # TODO: need better data for these!
+        M: {
+            ranks: {
+                "bad":        {"min-fpm":400},
+                "acceptable": {"min-fpm":300},
+                "good":       {"min-fpm":200},
+                "very-good":  {"min-fpm":100}
+            }
+        },
+        H: {
+            ranks: {
+                "bad":        {"min-fpm":600},
+                "acceptable": {"min-fpm":400},
+                "good":       {"min-fpm":200},
+                "very-good":  {"min-fpm":100}
+            }
+        },
+        J: {
+            ranks: {
+                "bad":        {"min-fpm":600},
+                "acceptable": {"min-fpm":400},
+                "good":       {"min-fpm":200},
+                "very-good":  {"min-fpm":100}
+            }
+        }
+    }
+});
+
+
+
+
 var window = screen.window.new(10, 10, 3, 10); # create new window object, x = 10, y = 10, maxlines = 3, autoscroll = 10
 window.bg = [0, 0, 0, .5]; # black alpha .5 background
 var aglFt = 20; # agl trigger temporary 20.
@@ -136,20 +182,27 @@ var checkCompatibility = func {
 var evaluateLandingRateAddonCfg = func(base, addon) {
     # evaluate config from "ranks" subnode
     # for hints properties, we treat the rank name as lowercase and convert spaces to dashes
-    logprint(LOG_DEBUG, "Landing Rate Addon: evaluate config from: "~base);
+    logprint(LOG_DEBUG, "Landing Rate Addon: evaluate config from: "~base.getPath()~"/ranks");
     foreach (var rank; LANDING_RANK) {
         var rank_prop_name = string.replace(string.lc(rank.name), " ", "-");
 
-        var rank_prop_val_minfpm = getprop(base~"/ranks/"~rank_prop_name ~ "/min-fpm");
-        if (rank_prop_val_minfpm != nil) {
-            if (string.scanf(rank_prop_val_minfpm, "%f", var r=[])) {
-                setprop(addon.node.getPath()~"/ranks/"~rank_prop_name ~ "/min-fpm", rank_prop_val_minfpm);
-                logprint(LOG_DEBUG, "Landing Rate Addon: config '" ~ rank.name ~ "' minFpm set to " ~ rank_prop_val_minfpm);
+        var cfg_prop_path = "ranks/"~rank_prop_name~"/min-fpm";
+        var rank_prop_val_minfpm_node = base.getNode(cfg_prop_path);
+        if (rank_prop_val_minfpm_node != nil) {
+            var rank_prop_val_minfpm = rank_prop_val_minfpm_node.getValue();
+            if (rank_prop_val_minfpm != nil) {
+                # explicitely convert to string and check its a number
+                if (string.scanf(""~rank_prop_val_minfpm, "%f", var r=[])) {
+                    setprop(addon.node.getPath()~"/ranks/"~rank_prop_name ~ "/min-fpm", rank_prop_val_minfpm);
+                    logprint(LOG_DEBUG, "Landing Rate Addon:   config '" ~ rank.name ~ "' minFpm set to " ~ rank_prop_val_minfpm);
+                } else {
+                    logprint(LOG_ALERT, "Landing Rate Addon:   config invalid format (not a number) in " ~ rank_prop_name );
+                }
             } else {
-                logprint(LOG_ALERT, "Landing Rate Addon: config invalid format (not a number) in " ~ rank_prop_name );
+                logprint(LOG_DEBUG, "Landing Rate Addon:   config '" ~ rank.name ~ "' ignored nil value of "~rank_prop_val_minfpm_node.getPath());
             }
         } else {
-            logprint(LOG_DEBUG, "Landing Rate Addon: config '" ~ rank.name ~ "' ignored nil value");
+            logprint(LOG_DEBUG, "Landing Rate Addon:   config '" ~ rank.name ~ "' ignored nil property " ~ cfg_prop_path);
         }
     }
 };
@@ -160,8 +213,19 @@ var main = func (addon) {
         if (getprop("/sim/signals/fdm-initialized")) {
             # checking compatibility, set agl trigger by current agl.
             if (checkCompatibility()) {
+
+                # If defined, load ICAO wake turbulence guess values
+                var icao_wake_t_cat = getprop("/aircraft/icao/wake-turbulence-category");
+                if (icao_wake_t_cat != "") {
+                    var icao_wake_t_cat_cfg = LANDING_RANK_CFG.getNode("icao-wake-turbulence-category/"~icao_wake_t_cat);
+                    if (icao_wake_t_cat_cfg != nil)
+                        evaluateLandingRateAddonCfg(icao_wake_t_cat_cfg, addon);
+                }
+
                 # load addon-hints from aircraft
-                evaluateLandingRateAddonCfg("/sim/addon-hints/landing_rate/", addon);
+                var addon_hints = props.globals.getNode("/sim/addon-hints/landing_rate/");
+                if (addon_hints != nil)
+                    evaluateLandingRateAddonCfg(addon_hints, addon);
 
                 aglFt = getprop("/position/altitude-agl-ft") + 6;
 
