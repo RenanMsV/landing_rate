@@ -30,14 +30,7 @@ If you're using an incompatible aircraft a message will be show. And the addon w
 
 ### Share stats at mp chat
 
-If you want, you can activate it. And a message will be sent by multiplayer chat showing your landing stats.
-
-To enable it go to landing_rate folder and open addon-config.xml. Find sharemp line.
-
-```<sharemp>0</sharemp>```
-
-Change sharemp value (1 for yes and 0 for no). Restart your simulator. Done.
-
+The addon can automatically send your landing rate in a message if you are in a multiplayer server. You can activate it in the addon settings menu, that can be found by clicking the Landing Rate option of your menu bar.
 
 ### Aircraft developer info
 
