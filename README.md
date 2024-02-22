@@ -28,9 +28,15 @@ If you're using an incompatible aircraft a message will be show. And the addon w
 
 ![ErrorExample](https://i.imgur.com/20NlJdQ.jpg)
 
-### Share stats at mp chat
+### Settings
 
-The addon can automatically send your landing rate in a message if you are in a multiplayer server. You can activate it in the addon settings menu, that can be found by clicking the Landing Rate option of your menu bar.
+The settings menu can be found by clicking the Landing Rate option of your menu bar.
+
+#### Send landing stats at multiplayer chat
+
+The addon can automatically send your landing rate in a message if you are in a multiplayer server. You can activate it in the addon settings menu.
+
+`Note: This setting will be persistent across sessions. Some pilots may find these messages disturbing, especially if you are at a busy airport. Use with moderation.`
 
 ### Aircraft developer info
 
