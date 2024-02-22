@@ -7,7 +7,7 @@ Slightly modified by PO to make it compatible with more recent version of FG.
 
 ### Requirements
 
-FlightGear 2018.1 version.
+FlightGear 2018.2 version.
 
 ### Install Procedures
 
@@ -28,16 +28,15 @@ If you're using an incompatible aircraft a message will be show. And the addon w
 
 ![ErrorExample](https://i.imgur.com/20NlJdQ.jpg)
 
-### Share stats at mp chat
+### Settings
 
-If you want, you can activate it. And a message will be sent by multiplayer chat showing your landing stats.
+The settings menu can be found by clicking the Landing Rate option of your menu bar.
 
-To enable it go to landing_rate folder and open addon-config.xml. Find sharemp line.
+#### Send landing stats at multiplayer chat
 
-```<sharemp>0</sharemp>```
+The addon can automatically send your landing rate in a message if you are in a multiplayer server. You can activate it in the addon settings menu.
 
-Change sharemp value (1 for yes and 0 for no). Restart your simulator. Done.
-
+`Note: This setting will be persistent across sessions. Some pilots may find these messages disturbing, especially if you are at a busy airport. Use with moderation.`
 
 ### Aircraft developer info
 

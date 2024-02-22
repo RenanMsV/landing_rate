@@ -202,6 +202,11 @@ var main = func (addon) {
                 printPersistentScreenMsg("Landing Rate Addon Loaded", COLOR_WHITE, 20); # success
                 print("Landing Rate addon loaded."); # success
 
+                if (getprop(addon.node.getPath() ~ "/addon-devel/sharemp")) {
+                    printPersistentScreenMsg("Settings: Share landing in multiplayer is enabled", COLOR_YELLOW, 20); # success
+                    print("Settings: Share landing in multiplayer is enabled");
+                }
+
             } else {
                 # prints persistent message, white, 30 sec
                 printPersistentScreenMsg("Aircraft not compatible with Landing Rate addon. Sorry about that.", COLOR_WHITE, 30);

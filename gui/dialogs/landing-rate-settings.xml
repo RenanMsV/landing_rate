@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<PropertyList>
+  <name>landing_rate_settings</name>
+  <layout>vbox</layout>
+  <width>285</width>
+  <resizable>false</resizable>
+
+  <group>
+    <layout>hbox</layout>
+    <text>
+      <halign>right</halign>
+      <label>Landing Rate Settings</label>
+    </text>
+
+    <button>
+      <halign>right</halign>
+      <pref-width>16</pref-width>
+      <pref-height>16</pref-height>
+      <legend>X</legend>
+      <keynum>27</keynum>
+      <border>2</border>
+      <binding>
+        <command>dialog-close</command>
+      </binding>
+    </button>
+  </group>
+
+  <hrule/>
+
+  <checkbox>
+    <label>Send landing stats in mp chat?</label>
+    <live>true</live>
+    <halign>left</halign>
+    <property>/addons/by-id/org.flightgear.addons.landing-rate/addon-devel/sharemp</property>
+    <binding>
+      <command>dialog-apply</command>
+    </binding>
+  </checkbox>
+
+  <!--hrule/>
+
+  <text>
+    <label>https://github.com/RenanMsV/landing_rate</label>
+  </text-->
+
+</PropertyList>
