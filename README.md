@@ -49,6 +49,10 @@ To make the plane compatible, it should initialize and calculate the following p
 - `/instrumentation/vertical-speed-indicator/indicated-speed-mps`
 
 
+#### Presets based on ICAO wake turbolence category
+
+If your plane defines the `/aircraft/icao/wake-turbulence-category` property (either `L`, `M`, `H` or `J`), the plugin initializes a preset for that category as it guesses the size of the plane.
+
 #### Overriding landing category limits
 
 You can specify addon-hints in your aircraft.xml to override the landing category limits like this:

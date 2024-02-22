@@ -7,6 +7,25 @@
                 <addon-devel>
                     <sharemp>0</sharemp> <!-- share and send mp message when land? 1: yes 0: no -->
                 </addon-devel>
+                <ranks>
+                    <bad>
+                        <min-fpm>600</min-fpm>
+                    </bad>
+                    <acceptable>
+                        <min-fpm>400</min-fpm>
+                    </acceptable>
+                    <good>
+                        <min-fpm>200</min-fpm>
+                    </good>
+                    <very-good>
+                        <min-fpm>100</min-fpm>
+                    </very-good>
+
+                    <!-- excellent is default, never override -->
+                    <excellent>
+                        <min-fpm>0</min-fpm>
+                    </excellent>
+                </ranks>
             </org.flightgear.addons.landing-rate>
         </by-id>
     </addons>
