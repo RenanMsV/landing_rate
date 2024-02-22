@@ -7,7 +7,7 @@ Slightly modified by PO to make it compatible with more recent version of FG.
 
 ### Requirements
 
-FlightGear 2018.1 version.
+FlightGear 2018.2 version.
 
 ### Install Procedures
 

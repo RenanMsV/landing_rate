@@ -16,7 +16,7 @@
             </author>
         </authors>
 
-        <min-FG-version type="string">2018.1.0</min-FG-version>
+        <min-FG-version type="string">2018.2.0</min-FG-version>
         <max-FG-version type="string">none</max-FG-version>
 
         <short-description type="string">Show your landing stats</short-description>
