@@ -166,6 +166,17 @@ var evaluateLandingRateAddonCfg = func(base, addon) {
     }
 };
 
+var initListenForUserRanksChange = func(addon) {
+    foreach (var rank; LANDING_RANK) {
+        var rank_prop_name = string.replace(string.lc(rank.name), " ", "-");
+        var cfg_prop_path = "ranks/"~rank_prop_name~"/min-fpm";
+        var rank_prop_val_minfpm_node = addon.node.getNode(cfg_prop_path);
+        setlistener(rank_prop_val_minfpm_node, func (node) {
+            setprop(addon.node.getPath()~"/ranks/loaded-from", "user defined");
+        }, 0, 0);
+    }
+};
+
 var main = func (addon) {
     # Must be _setlistener because removelistener doesn't work well with setlistener
     var fdmInitListener = _setlistener("/sim/signals/fdm-initialized", func {
@@ -177,27 +188,35 @@ var main = func (addon) {
                 var icao_wake_t_cat = getprop("/aircraft/icao/wake-turbulence-category");
                 if (icao_wake_t_cat != nil and icao_wake_t_cat != "") {
                     var icao_wake_t_cat_cfg = LANDING_RANK_CFG.getNode("icao-wake-turbulence-category/"~icao_wake_t_cat);
-                    if (icao_wake_t_cat_cfg != nil)
+                    if (icao_wake_t_cat_cfg != nil) {
                         evaluateLandingRateAddonCfg(icao_wake_t_cat_cfg, addon);
+                        setprop(addon.node.getPath()~"/ranks/loaded-from", "icao-wakecategory");
+                    }
                 }
 
                 # If defined, load aircraft type values
                 var aircraft = getprop("/sim/aircraft");
                 if (aircraft != nil and aircraft != "") {
                     var aircraft_type_cfg = LANDING_RANK_CFG.getNode("aircraft-types/"~aircraft);
-                    if (aircraft_type_cfg != nil)
+                    if (aircraft_type_cfg != nil) {
                         evaluateLandingRateAddonCfg(aircraft_type_cfg, addon);
+                        setprop(addon.node.getPath()~"/ranks/loaded-from", "aircraft-type");
+                    }
                 }
 
                 # load addon-hints from aircraft
                 var addon_hints = props.globals.getNode("/sim/addon-hints/landing_rate/");
-                if (addon_hints != nil)
+                if (addon_hints != nil) {
                     evaluateLandingRateAddonCfg(addon_hints, addon);
+                    setprop(addon.node.getPath()~"/ranks/loaded-from", "aircraft-addon-hints");
+                }
 
                 aglFt = getprop("/position/altitude-agl-ft") + 6;
 
                 initLandingRateTimer(addon); # init addon
                 removelistener(fdmInitListener);
+
+                initListenForUserRanksChange(addon);
 
                 printPersistentScreenMsg("Landing Rate Addon Loaded", COLOR_WHITE, 20); # success
                 print("Landing Rate addon loaded."); # success

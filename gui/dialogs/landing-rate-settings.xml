@@ -64,10 +64,21 @@
     <group>
       <layout>vbox</layout>
       <halign>left</halign>
-      <text>
-        <halign>left</halign>
-        <label>Landing Rate Ranks:</label>
-      </text>
+
+      <group>
+        <layout>vbox</layout>
+        <text>
+          <halign>left</halign>
+          <label>Landing Rate Ranks:</label>
+        </text>
+        <text>
+          <halign>left</halign>
+          <label>(loaded from: source invalid)</label>
+          <format>  (loaded from: %s)</format>
+          <live>true</live>
+          <property>/addons/by-id/org.flightgear.addons.landing-rate/ranks/loaded-from</property>
+        </text>
+      </group>
 
       <group>
         <layout>table</layout>
