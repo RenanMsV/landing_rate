@@ -2,9 +2,10 @@
 <PropertyList>
   <name>landing_rate_settings</name>
   <layout>vbox</layout>
-  <width>285</width>
-  <resizable>false</resizable>
+  <width>450</width>
+  <resizable>true</resizable>
 
+  <!-- DIALOG HEADER -->
   <group>
     <layout>hbox</layout>
     <text>
@@ -25,22 +26,195 @@
     </button>
   </group>
 
+
+  <!-- GENERIC OPTIONS -->
   <hrule/>
-
-  <checkbox>
-    <label>Send landing stats in mp chat?</label>
-    <live>true</live>
+  <group>
+    <layout>hbox</layout>
     <halign>left</halign>
-    <property>/addons/by-id/org.flightgear.addons.landing-rate/addon-devel/sharemp</property>
-    <binding>
-      <command>dialog-apply</command>
-    </binding>
-  </checkbox>
+    <!-- Small left padding -->
+    <group>
+        <layout>vbox</layout>
+        <padding>6</padding>
+    </group>
 
-  <!--hrule/>
+    <group>
+      <layout>vbox</layout>
+      <halign>left</halign>
+      <checkbox>
+        <label>Send landing stats in mp chat?</label>
+        <halign>left</halign>
+        <property>/addons/by-id/org.flightgear.addons.landing-rate/addon-devel/sharemp</property>
+      </checkbox>
+    </group>
+  </group>
+
+
+  <!-- RANKS CONFIG -->
+  <hrule/>
+  <group>
+    <layout>hbox</layout>
+    <halign>left</halign>
+    <!-- Small left padding -->
+    <group>
+        <layout>vbox</layout>
+        <padding>6</padding>
+    </group>
+
+    <group>
+      <layout>vbox</layout>
+      <halign>left</halign>
+
+      <group>
+        <layout>vbox</layout>
+        <text>
+          <halign>left</halign>
+          <label>Landing Rate Ranks:</label>
+        </text>
+        <text>
+          <halign>left</halign>
+          <label>(loaded from: source invalid)</label>
+          <format>  (loaded from: %s)</format>
+          <live>true</live>
+          <property>/addons/by-id/org.flightgear.addons.landing-rate/ranks/loaded-from</property>
+        </text>
+      </group>
+
+      <group>
+        <layout>table</layout>
+        <halign>left</halign>
+        <valign>top</valign>
+
+        <text>
+          <row>0</row>
+          <col>0</col>
+            <label>Bad:</label>
+            <halign>left</halign>
+        </text>
+        <input>
+          <row>0</row>
+          <col>1</col>
+          <label>ft/m</label>
+          <halign>left</halign>
+          <property>/addons/by-id/org.flightgear.addons.landing-rate/ranks/bad/min-fpm</property>
+        </input>
+
+
+        <text>
+          <row>1</row>
+          <col>0</col>
+          <label>Acceptable:</label>
+          <halign>left</halign>
+        </text>
+        <input>
+          <row>1</row>
+          <col>1</col>
+          <label>ft/m</label>
+          <halign>left</halign>
+          <property>/addons/by-id/org.flightgear.addons.landing-rate/ranks/acceptable/min-fpm</property>
+        </input>
+
+        <text>
+          <row>2</row>
+          <col>0</col>
+          <label>Good:</label>
+          <halign>left</halign>
+        </text>
+        <input>
+          <row>2</row>
+          <col>1</col>
+          <label>ft/m</label>
+          <halign>left</halign>
+          <property>/addons/by-id/org.flightgear.addons.landing-rate/ranks/good/min-fpm</property>
+        </input>
+
+        <text>
+          <row>3</row>
+          <col>0</col>
+          <label>Very Good:</label>
+          <halign>left</halign>
+        </text>
+        <input>
+          <row>3</row>
+          <col>1</col>
+          <label>ft/m</label>
+          <halign>left</halign>
+          <property>/addons/by-id/org.flightgear.addons.landing-rate/ranks/very-good/min-fpm</property>
+        </input>
+
+        <!-- Excellent is always the lowest/best rank and need to start at 0 values!
+        <text>
+          <row>4</row>
+          <col>0</col>
+          <label>Excellent:</label>
+          <halign>left</halign>
+        </text>
+        <input>
+          <row>4</row>
+          <col>1</col>
+          <label>ft/m</label>
+          <halign>left</halign>
+          <property>/addons/by-id/org.flightgear.addons.landing-rate/ranks/excellent/min-fpm</property>
+        </input>
+        -->
+      </group>
+    </group>
+  </group>
+
+
+  <!-- DIALOG FOOTER / BUTTONS -->
+  <hrule/>
+  <group>
+    <layout>vbox</layout>
+    <empty><stretch>true</stretch></empty>
+    <group>
+      <layout>hbox</layout>
+      <default-padding>6</default-padding>
+      <empty><stretch>true</stretch></empty>
+      <button>
+        <legend>OK</legend>
+        <pref-width>90</pref-width>
+        <pref-height>30</pref-height>
+        <binding>
+            <command>dialog-apply</command>
+        </binding>
+        <binding>
+            <command>dialog-close</command>
+        </binding>
+      </button>
+      <button>
+          <legend>Apply</legend>
+          <pref-width>90</pref-width>
+          <pref-height>30</pref-height>
+          <equal>true</equal>
+          <default>true</default>
+          <binding>
+            <command>dialog-apply</command>
+          </binding>
+      </button>
+      <button>
+          <legend>Cancel</legend>
+          <pref-width>90</pref-width>
+          <pref-height>30</pref-height>
+          <equal>true</equal>
+          <key>Esc</key>
+          <default>true</default>
+          <binding>
+              <command>dialog-close</command>
+          </binding>
+      </button>
+      <empty><stretch>true</stretch></empty>
+    </group>
+  </group>
 
   <text>
+    <label>If you see bugs or want to suggest better values,</label>
+  </text>
+  <text>
+    <label>please report at the projects page:</label>
+  </text>
+  <text>
     <label>https://github.com/RenanMsV/landing_rate</label>
-  </text-->
+  </text>
 
 </PropertyList>

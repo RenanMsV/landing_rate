@@ -8,6 +8,7 @@
                     <sharemp userarchive="y" type="bool">0</sharemp> <!-- share and send mp message when land? 1: yes 0: no -->
                 </addon-devel>
                 <ranks>
+                    <loaded-from>defaults</loaded-from>
                     <bad>
                         <min-fpm>600</min-fpm>
                     </bad>
