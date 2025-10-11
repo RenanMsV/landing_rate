@@ -177,62 +177,70 @@ var initListenForUserRanksChange = func(addon) {
     }
 };
 
+var init = func (addon, fdmInitListener) {
+    # checking compatibility, set agl trigger by current agl.
+    if (checkCompatibility()) {
+
+        # If defined, load ICAO wake turbulence guess values
+        var icao_wake_t_cat = getprop("/aircraft/icao/wake-turbulence-category");
+        if (icao_wake_t_cat != nil and icao_wake_t_cat != "") {
+            var icao_wake_t_cat_cfg = LANDING_RANK_CFG.getNode("icao-wake-turbulence-category/"~icao_wake_t_cat);
+            if (icao_wake_t_cat_cfg != nil) {
+                evaluateLandingRateAddonCfg(icao_wake_t_cat_cfg, addon);
+                setprop(addon.node.getPath()~"/ranks/loaded-from", "icao-wakecategory");
+            }
+        }
+
+        # If defined, load aircraft type values
+        var aircraft = getprop("/sim/aircraft");
+        if (aircraft != nil and aircraft != "") {
+            var aircraft_type_cfg = LANDING_RANK_CFG.getNode("aircraft-types/"~aircraft);
+            if (aircraft_type_cfg != nil) {
+                evaluateLandingRateAddonCfg(aircraft_type_cfg, addon);
+                setprop(addon.node.getPath()~"/ranks/loaded-from", "aircraft-type");
+            }
+        }
+
+        # load addon-hints from aircraft
+        var addon_hints = props.globals.getNode("/sim/addon-hints/landing_rate/");
+        if (addon_hints != nil) {
+            evaluateLandingRateAddonCfg(addon_hints, addon);
+            setprop(addon.node.getPath()~"/ranks/loaded-from", "aircraft-addon-hints");
+        }
+
+        aglFt = getprop("/position/altitude-agl-ft") + 6;
+
+        initLandingRateTimer(addon); # init addon
+        removelistener(fdmInitListener);
+
+        initListenForUserRanksChange(addon);
+
+        printPersistentScreenMsg("Landing Rate Addon Loaded", COLOR_WHITE, 20); # success
+        print("Landing Rate addon loaded."); # success
+
+        if (getprop(addon.node.getPath() ~ "/addon-devel/sharemp")) {
+            printPersistentScreenMsg("Settings: Share landing in multiplayer is enabled", COLOR_YELLOW, 20); # success
+            print("Settings: Share landing in multiplayer is enabled");
+        }
+
+    } else {
+        # prints persistent message, white, 30 sec
+        printPersistentScreenMsg("Aircraft not compatible with Landing Rate addon. Sorry about that.", COLOR_WHITE, 30);
+
+        # die addon, quit script with custom message.
+        logprint(LOG_ALERT, "Landing Rate addon shutdown. Aircraft not compatible with Landing Rate addon. Sorry about that.");
+    }
+};
+
 var main = func (addon) {
     # Must be _setlistener because removelistener doesn't work well with setlistener
     var fdmInitListener = _setlistener("/sim/signals/fdm-initialized", func {
         if (getprop("/sim/signals/fdm-initialized")) {
-            # checking compatibility, set agl trigger by current agl.
-            if (checkCompatibility()) {
-
-                # If defined, load ICAO wake turbulence guess values
-                var icao_wake_t_cat = getprop("/aircraft/icao/wake-turbulence-category");
-                if (icao_wake_t_cat != nil and icao_wake_t_cat != "") {
-                    var icao_wake_t_cat_cfg = LANDING_RANK_CFG.getNode("icao-wake-turbulence-category/"~icao_wake_t_cat);
-                    if (icao_wake_t_cat_cfg != nil) {
-                        evaluateLandingRateAddonCfg(icao_wake_t_cat_cfg, addon);
-                        setprop(addon.node.getPath()~"/ranks/loaded-from", "icao-wakecategory");
-                    }
-                }
-
-                # If defined, load aircraft type values
-                var aircraft = getprop("/sim/aircraft");
-                if (aircraft != nil and aircraft != "") {
-                    var aircraft_type_cfg = LANDING_RANK_CFG.getNode("aircraft-types/"~aircraft);
-                    if (aircraft_type_cfg != nil) {
-                        evaluateLandingRateAddonCfg(aircraft_type_cfg, addon);
-                        setprop(addon.node.getPath()~"/ranks/loaded-from", "aircraft-type");
-                    }
-                }
-
-                # load addon-hints from aircraft
-                var addon_hints = props.globals.getNode("/sim/addon-hints/landing_rate/");
-                if (addon_hints != nil) {
-                    evaluateLandingRateAddonCfg(addon_hints, addon);
-                    setprop(addon.node.getPath()~"/ranks/loaded-from", "aircraft-addon-hints");
-                }
-
-                aglFt = getprop("/position/altitude-agl-ft") + 6;
-
-                initLandingRateTimer(addon); # init addon
-                removelistener(fdmInitListener);
-
-                initListenForUserRanksChange(addon);
-
-                printPersistentScreenMsg("Landing Rate Addon Loaded", COLOR_WHITE, 20); # success
-                print("Landing Rate addon loaded."); # success
-
-                if (getprop(addon.node.getPath() ~ "/addon-devel/sharemp")) {
-                    printPersistentScreenMsg("Settings: Share landing in multiplayer is enabled", COLOR_YELLOW, 20); # success
-                    print("Settings: Share landing in multiplayer is enabled");
-                }
-
-            } else {
-                # prints persistent message, white, 30 sec
-                printPersistentScreenMsg("Aircraft not compatible with Landing Rate addon. Sorry about that.", COLOR_WHITE, 30);
-
-                # die addon, quit script with custom message.
-                logprint(LOG_ALERT, "Landing Rate addon shutdown. Aircraft not compatible with Landing Rate addon. Sorry about that.");
-            }
+            # Some aircraft like an24b report incompatibility, and it only need
+            # to give them a few seconds to set the required properties.
+            var timer = maketimer(2, func { init(addon, fdmInitListener) });
+            timer.singleShot = 1;
+            timer.start();
         }
     });
 };
